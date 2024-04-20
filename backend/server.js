@@ -142,7 +142,27 @@ app.get('/emails/c/:emailCategory', async (req, res) => {})
 
 // GET /emails/:emailId
 // path-ში დინამიურ სეგმენტად გადაეცემა emailId. აბრუნებს შესაბამის იმეილს.
-app.get('/emails/:emailId', async (req, res) => {})
+app.get('/emails/:emailId', verifyAuth, async (req, res) => {
+	const { emailId } = req.params
+
+	const email = await EMAIL.findById(emailId).populate(['sender', 'recipients'])
+
+	const currentUserIsRecipient = email.recipients.some((recipient) =>
+		recipient._id.equals(req.user._id)
+	)
+
+	if (!currentUserIsRecipient && email.sender !== req.user) {
+		console.log(
+			email.recipients,
+			email.sender,
+			req.user,
+			currentUserIsRecipient
+		)
+		return res.sendStatus(401)
+	}
+
+	return res.json(email)
+})
 
 // PATCH /emails/:emailId
 // path-ში დინამიურ სეგმენტად გადაეცემა emailId. req.body-ში გადაეცემა archived - true ან false.
