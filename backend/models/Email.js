@@ -1,8 +1,8 @@
 // sender, recipients, subject, body, sentAt, archived.
 
-import mongoose from 'mongoose'
+import { model, Schema } from 'mongoose'
 
-const emailSchema = new mongoose.Schema(
+const emailSchema = new Schema(
 	{
 		sender: {
 			type: Schema.Types.ObjectId,
@@ -35,4 +35,4 @@ const emailSchema = new mongoose.Schema(
 	}
 )
 
-export const EMAIL = mongoose.model('EMAIL', emailSchema)
+export const EMAIL = model('EMAIL', emailSchema)

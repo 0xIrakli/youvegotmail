@@ -5,10 +5,12 @@ import cookieparser from 'cookie-parser'
 import session from 'express-session'
 import bcrypt from 'bcrypt'
 import cors from 'cors'
-import { USER } from './models/User.js'
+import dotenv from 'dotenv'
+
 import { verifyAuth } from './middleware/verifyAuth.js'
 
-import dotenv from 'dotenv'
+import { USER } from './models/User.js'
+import { EMAIL } from './models/Email.js'
 
 dotenv.config({ path: '.env' })
 
@@ -101,17 +103,46 @@ app.delete('/user/logout', (req, res) => {
 // POST /emails
 // req.body-ში გადაეცემა recipients, subject და body, სადაც recipients მძიმით გამოყოფილი იმეილების string-ია.
 // ქმნის ახალ იმეილს და აბრუნებს ახალი იმეილის საჭირო ატრიბუტებს.
-app.post('/emails', () => {})
+app.post('/emails', verifyAuth, async (req, res) => {
+	const { recipients: recipientsString, subject, body } = req.body
+
+	const recipientEmails = new Set(recipientsString.split(','))
+
+	const recipients = await Promise.all(
+		[...recipientEmails].map((recipient) =>
+			USER.findOne({ email: recipient })
+				.lean()
+				.then((obj) => obj._id)
+		)
+	)
+
+	if (!recipients.every((el) => el)) {
+		return res.status(400).json({
+			message: 'One or more of recipient email addresses is incorrect',
+		})
+	}
+
+	const newEmail = await EMAIL.create({
+		sender: req.user,
+		recipients,
+		subject,
+		body,
+		archived: false,
+	})
+
+	await newEmail.save()
+	res.json(newEmail)
+})
 
 // GET /emails/c/:emailCategory
 // path-ში დინამიურ სეგმენტად გადაეცემა emailCategory. აბრუნებს გადაცემულ კატეგორიაში შენახულ იმეილებს.
 // Inbox კატეგორიის მითითებისას ყველა ისეთი იმეილი უნდა დაბრუნდეს, რომელიც არ არის archived.
 // დანარჩენი კატეგორიები სახელების მიხედვით.ეს endpoint უნდა აბრუნებდეს სორტირებულ იმეილებს - უახლესი იმეილები დასაწყისში.
-app.get('/emails/c/:emailCategory', () => {})
+app.get('/emails/c/:emailCategory', async (req, res) => {})
 
 // GET /emails/:emailId
 // path-ში დინამიურ სეგმენტად გადაეცემა emailId. აბრუნებს შესაბამის იმეილს.
-app.get('/emails/:emailId', () => {})
+app.get('/emails/:emailId', async (req, res) => {})
 
 // PATCH /emails/:emailId
 // path-ში დინამიურ სეგმენტად გადაეცემა emailId. req.body-ში გადაეცემა archived - true ან false.
