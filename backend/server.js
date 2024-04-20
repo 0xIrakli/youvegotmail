@@ -16,6 +16,14 @@ dotenv.config({ path: '.env' })
 
 const app = express()
 
+const hasPermissions = async (user, email) => {
+	const currentUserIsRecipient = email.recipients.some((recipientId) =>
+		recipientId.equals(user._id)
+	)
+
+	return currentUserIsRecipient || email.sender.equals(user._id)
+}
+
 app.use(
 	cors({
 		origin: '*',
@@ -56,7 +64,7 @@ app.get('/user/status', verifyAuth, (req, res) => {
 app.post('/user/register', async (req, res) => {
 	const { email: regEmail, password: regPassword } = req.body
 
-	if (await USER.findOne({ email: regEmail }).exec()) {
+	if (await USER.findOne({ email: regEmail })) {
 		return res.status(409).json({ message: 'email already in use' })
 	}
 
@@ -145,19 +153,13 @@ app.get('/emails/c/:emailCategory', async (req, res) => {})
 app.get('/emails/:emailId', verifyAuth, async (req, res) => {
 	const { emailId } = req.params
 
-	const email = await EMAIL.findById(emailId).populate(['sender', 'recipients'])
+	const email = await EMAIL.findById(emailId)
 
-	const currentUserIsRecipient = email.recipients.some((recipient) =>
-		recipient._id.equals(req.user._id)
-	)
+	if (!email) {
+		return res.sendStatus(404)
+	}
 
-	if (!currentUserIsRecipient && email.sender !== req.user) {
-		console.log(
-			email.recipients,
-			email.sender,
-			req.user,
-			currentUserIsRecipient
-		)
+	if (!(await hasPermissions(req.user, email))) {
 		return res.sendStatus(401)
 	}
 
@@ -167,7 +169,26 @@ app.get('/emails/:emailId', verifyAuth, async (req, res) => {
 // PATCH /emails/:emailId
 // path-ში დინამიურ სეგმენტად გადაეცემა emailId. req.body-ში გადაეცემა archived - true ან false.
 // ეს არის იმეილის დაარქივების endpoint.archived პარამეტრის მიხედვით უნდა განაახლოთ იმეილი და დააბრუნოთ განახლებული იმეილის საჭირო ატრიბუტები.
-app.patch('/emails/:emailId', () => {})
+app.patch('/emails/:emailId', verifyAuth, async (req, res) => {
+	const { archived } = req.body
+	const { emailId } = req.params
+
+	const email = await EMAIL.findById(emailId)
+
+	if (!email) {
+		return res.sendStatus(404)
+	}
+
+	if (!(await hasPermissions(req.user, email))) {
+		console.log('AAAAAAAA?????')
+		return res.sendStatus(401)
+	}
+
+	email.archived = archived
+	await email.save()
+
+	return res.json(email)
+})
 
 // მნიშვნელოვანია: იმეილის დაბრუნებამდე/შეცვლამდე აუცილებლად შეამოწმეთ არის თუ არა ავტორიზებული მომხმარებელი გამოგზავნი/მიმღები მომხმარებლების სიაში.
 // სხვის ანგარიშში დამატებული იმეილის წაკითხვა / დაარქივება მომხმარებელს არ უნდა შეეძლოს.
