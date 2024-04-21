@@ -146,7 +146,39 @@ app.post('/emails', verifyAuth, async (req, res) => {
 // path-ში დინამიურ სეგმენტად გადაეცემა emailCategory. აბრუნებს გადაცემულ კატეგორიაში შენახულ იმეილებს.
 // Inbox კატეგორიის მითითებისას ყველა ისეთი იმეილი უნდა დაბრუნდეს, რომელიც არ არის archived.
 // დანარჩენი კატეგორიები სახელების მიხედვით.ეს endpoint უნდა აბრუნებდეს სორტირებულ იმეილებს - უახლესი იმეილები დასაწყისში.
-app.get('/emails/c/:emailCategory', async (req, res) => {})
+app.get('/emails/c/:emailCategory', verifyAuth, async (req, res) => {
+	const { emailCategory: category } = req.params
+	const userId = req.user._id
+	let query = null
+
+	if (category.toLowerCase() === 'inbox') {
+		query = {
+			archived: false,
+			$or: [{ recipients: userId }, { sender: userId }],
+		}
+	}
+
+	if (category.toLowerCase() === 'sent') {
+		query = {
+			sender: userId,
+		}
+	}
+
+	if (category.toLowerCase() === 'archived') {
+		query = {
+			archived: true,
+			$or: [{ recipients: userId }, { sender: userId }],
+		}
+	}
+
+	if (!query) {
+		return res.sendStatus(400)
+	}
+
+	return res.json(
+		await EMAIL.find(query).lean().sort({ createdAt: 'descending' })
+	)
+})
 
 // GET /emails/:emailId
 // path-ში დინამიურ სეგმენტად გადაეცემა emailId. აბრუნებს შესაბამის იმეილს.
