@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom'
 import RootLayout from './pages/RootLayout'
 import NotFoundPage from './pages/NotFoundPage'
+import { AuthContextProvider } from './components/AuthContext'
 
 function App() {
 	const router = createBrowserRouter(
@@ -28,7 +29,9 @@ function App() {
 
 	return (
 		<>
-			<RouterProvider router={router} />
+			<AuthContextProvider>
+				<RouterProvider router={router} />
+			</AuthContextProvider>
 		</>
 	)
 }
