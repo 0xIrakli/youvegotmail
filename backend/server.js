@@ -175,9 +175,7 @@ app.get('/emails/c/:emailCategory', verifyAuth, async (req, res) => {
 		return res.sendStatus(400)
 	}
 
-	return res.json(
-		await EMAIL.find(query).lean().sort({ createdAt: 'descending' })
-	)
+	return res.json(await EMAIL.find(query).lean().sort({ createdAt: 'descending' }))
 })
 
 // GET /emails/:emailId

@@ -1,0 +1,40 @@
+@keyframes fade {
+	0% {
+		background: linear-gradient(90deg, #333333, #3d3d3d, #333333);
+		background-size: 200% 200%;
+		background-position: -100%, 0%;
+	}
+	100% {
+		background: linear-gradient(90deg, #333333, #3d3d3d, #333333);
+		background-size: 200% 200%;
+
+		background-position: 100%, 0%;
+	}
+}
+
+.button,
+.skeleton {
+	border: 2px solid transparent;
+	border-radius: 0.8rem;
+
+	padding-inline: 1.4rem;
+	padding-block: 0.6rem;
+
+	font-family: Roboto Mono;
+	font-size: 1.2rem;
+	font-weight: 500;
+	white-space-collapse: preserve;
+	text-wrap: nowrap;
+}
+
+.skeleton {
+	color: transparent;
+	animation: 1s ease-in infinite fade;
+}
+
+.button {
+	text-align: center;
+	cursor: pointer;
+	background-color: rgb(31, 31, 31);
+	border: 2px solid rgb(81, 81, 81);
+}
