@@ -36,5 +36,9 @@
 	text-align: center;
 	cursor: pointer;
 	background-color: rgb(31, 31, 31);
-	border: 2px solid rgb(81, 81, 81);
+	border: 2px solid rgb(91, 91, 91);
+}
+
+.button:active {
+	background-color: rgb(51, 51, 51);
 }

@@ -1,0 +1,23 @@
+.header {
+	padding-block: 3rem;
+	padding-inline: 8%;
+
+	gap: 4rem;
+
+	display: flex;
+	justify-content: start;
+	align-items: center;
+}
+
+.header h1 {
+	font-size: 3rem;
+}
+
+.header > div {
+	display: flex;
+	gap: 1rem;
+}
+
+.header .authButtons {
+	margin-left: auto;
+}
