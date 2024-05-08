@@ -23,7 +23,7 @@ export const NavButton = ({ to, children }) => {
 
 export const ButtonSkeleton = ({ children }) => {
 	return (
-		<button disabled={true} className={styles.skeleton}>
+		<button disabled={true} className={styles.skeleton} aria-hidden="true">
 			{children}
 		</button>
 	)
