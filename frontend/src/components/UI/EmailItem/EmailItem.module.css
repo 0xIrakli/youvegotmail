@@ -1,0 +1,29 @@
+.container,
+.skeleton {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+
+	padding: 0.4rem 2rem;
+	border-radius: 1rem;
+}
+
+.container {
+	border: 1px solid var(--gray);
+}
+
+.skeleton {
+	animation: 1s ease-in infinite var(--fade);
+}
+
+.skeleton * {
+	color: transparent;
+}
+
+.container span {
+	font-size: 1.1rem;
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}

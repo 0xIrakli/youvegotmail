@@ -22,10 +22,10 @@ export const Header = () => {
 				) : (
 					user && (
 						<>
-							<Button>Inbox</Button>
-							<Button>Sent</Button>
-							<Button>Archived</Button>
-							<Button>Compose</Button>
+							<NavButton to="/c/inbox">Inbox</NavButton>
+							<NavButton to="/c/sent">Sent</NavButton>
+							<NavButton to="/c/archived">Archived</NavButton>
+							<NavButton to="/compose">Compose</NavButton>
 						</>
 					)
 				)}

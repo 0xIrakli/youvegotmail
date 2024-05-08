@@ -175,10 +175,16 @@ app.get('/emails/c/:emailCategory', verifyAuth, async (req, res) => {
 	}
 
 	if (!query) {
-		return res.sendStatus(400)
+		return res.sendStatus(404)
 	}
 
-	return res.json(await EMAIL.find(query).lean().sort({ createdAt: 'descending' }))
+	return res.json(
+		await EMAIL.find(query)
+			.lean()
+			.populate('sender', 'email')
+			.populate('recipients', 'email')
+			.sort({ createdAt: 'descending' })
+	)
 })
 
 // GET /emails/:emailId
@@ -222,6 +228,20 @@ app.patch('/emails/:emailId', verifyAuth, async (req, res) => {
 
 	return res.json(email)
 })
+
+// app.delete('/emails/:emailId', verifyAuth, async (req, res) => {
+// 	const { emailId } = req.params
+
+// 	const email = await EMAIL.findById(emailId)
+
+// 	if (!(await hasPermissions(req.user, email))) {
+// 		return res.sendStatus(401)
+// 	}
+
+// 	console.log(await EMAIL.findByIdAndDelete(emailId))
+
+// 	return res.sendStatus(201)
+// })
 
 // მნიშვნელოვანია: იმეილის დაბრუნებამდე/შეცვლამდე აუცილებლად შეამოწმეთ არის თუ არა ავტორიზებული მომხმარებელი გამოგზავნი/მიმღები მომხმარებლების სიაში.
 // სხვის ანგარიშში დამატებული იმეილის წაკითხვა / დაარქივება მომხმარებელს არ უნდა შეეძლოს.

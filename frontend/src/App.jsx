@@ -11,8 +11,21 @@ import RootLayout from './pages/RootLayout'
 import NotFoundPage from './pages/NotFoundPage'
 import LoginPage from './pages/auth/LoginPage'
 import RegisterPage from './pages/auth/RegisterPage'
+import EmailListPage from './pages/emailList/EmailListPage'
 import { Navigate } from 'react-router-dom'
 import { AuthContext, AuthContextProvider } from './components/AuthContext'
+
+const ProtectedRoute = () => {
+	const { user, initialLoading } = useContext(AuthContext)
+
+	if (initialLoading) return null
+
+	if (user !== null) {
+		return <Outlet />
+	}
+
+	return user ? <Outlet /> : <Navigate to="/login" />
+}
 
 const RedirectIfLoggedIn = () => {
 	const { user, initialLoading } = useContext(AuthContext)
@@ -30,9 +43,12 @@ function App() {
 	const router = createBrowserRouter(
 		createRoutesFromElements(
 			<Route path="/" element={<RootLayout />}>
-				{/* <Route index element={<EmailListPage />} />
-				<Route path="c/:emailCategory" element={<EmailListPage />} />
-				<Route path="c/:emailId" element={<EmailPage />} /> */}
+				<Route index element={<Navigate to="/c/inbox" />} />
+
+				<Route element={<ProtectedRoute />}>
+					<Route path="c/:emailCategory" element={<EmailListPage />} />
+					{/* <Route path="c/:emailId" element={<EmailPage />} /> */}
+				</Route>
 
 				<Route element={<RedirectIfLoggedIn />}>
 					<Route path="/register" element={<RegisterPage />} />

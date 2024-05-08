@@ -1,0 +1,18 @@
+.container {
+	display: grid;
+	margin-inline: clamp(0.5rem, 20vw, 10rem);
+	gap: 1.5rem;
+	padding-bottom: 5rem;
+}
+
+.container h1 {
+	font-family: Roboto Mono;
+	color: var(--gray);
+	font-size: 2.5rem;
+}
+
+.listContainer {
+	display: grid;
+	gap: 0.5rem;
+	list-style: none;
+}
