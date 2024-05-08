@@ -25,6 +25,8 @@
 	font-weight: 500;
 	white-space-collapse: preserve;
 	text-wrap: nowrap;
+
+	text-decoration: none;
 }
 
 .skeleton {
@@ -36,9 +38,13 @@
 	text-align: center;
 	cursor: pointer;
 	background-color: rgb(31, 31, 31);
-	border: 2px solid rgb(91, 91, 91);
+	border: 2px solid var(--gray);
 }
 
 .button:active {
 	background-color: rgb(51, 51, 51);
+}
+
+.active {
+	border-color: white;
 }

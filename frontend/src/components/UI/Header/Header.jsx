@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react'
 import { axiosInstance } from '../../../lib/axiosInstance'
 import { AuthContext } from '../../AuthContext'
-import { Button, ButtonSkeleton } from '../Button/Button'
+import { NavButton, Button, ButtonSkeleton } from '../Button/Button'
 import { NavLink } from 'react-router-dom'
 import styles from './Header.module.css'
 
@@ -16,10 +16,8 @@ export const Header = () => {
 			<div>
 				{initialLoading ? (
 					<>
-						<ButtonSkeleton>Compose</ButtonSkeleton>
 						<ButtonSkeleton>Inbox</ButtonSkeleton>
 						<ButtonSkeleton>Sent</ButtonSkeleton>
-						<ButtonSkeleton>Archived</ButtonSkeleton>
 					</>
 				) : (
 					user && (
@@ -32,8 +30,8 @@ export const Header = () => {
 					)
 				)}
 			</div>
-
 			<div className={styles.authButtons}>
+				<h4>{user && user.email}</h4>
 				{initialLoading ? (
 					<>
 						<ButtonSkeleton>log in</ButtonSkeleton>
@@ -45,8 +43,8 @@ export const Header = () => {
 					</>
 				) : (
 					<>
-						<Button>log in</Button>
-						<Button>register</Button>
+						<NavButton to="/login">login</NavButton>
+						<NavButton to="/register">register</NavButton>
 					</>
 				)}
 			</div>
