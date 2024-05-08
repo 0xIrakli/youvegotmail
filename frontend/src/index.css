@@ -1,4 +1,7 @@
 :root {
+	--gray: rgb(91, 91, 91);
+	--red: rgb(220, 110, 110);
+
 	font-weight: 400;
 
 	font-synthesis: none;
@@ -7,6 +10,11 @@
 	-moz-osx-font-smoothing: grayscale;
 
 	background-color: rgb(31, 31, 31);
+}
+
+#root {
+	min-height: 100vh;
+	height: 100vh;
 }
 
 * {

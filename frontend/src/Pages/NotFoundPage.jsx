@@ -4,14 +4,14 @@ const NotFoundPage = () => {
 	return (
 		<div
 			style={{
-				height: '100vh',
+				height: '100%',
 				display: 'flex',
 				flexDirection: 'column',
-				justifyContent: 'center',
 				alignItems: 'center',
+				paddingTop: '15%',
 			}}>
 			<h1>404</h1>
-			<h1>page not found</h1>
+			<h1>Page Not Found</h1>
 		</div>
 	)
 }

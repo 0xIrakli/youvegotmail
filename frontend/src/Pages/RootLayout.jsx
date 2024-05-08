@@ -3,12 +3,12 @@ import { Header } from '../components/UI/Header/Header'
 
 const RootLayout = () => {
 	return (
-		<div>
+		<>
 			<Header />
 			<main>
 				<Outlet />
 			</main>
-		</div>
+		</>
 	)
 }
 

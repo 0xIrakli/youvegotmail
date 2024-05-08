@@ -1,0 +1,39 @@
+.formContainer {
+	display: grid;
+	place-items: center;
+	padding-top: 8%;
+}
+
+.form {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-end;
+	gap: 1rem;
+
+	width: clamp(25rem, 40%, 30rem);
+}
+
+.form div {
+	display: grid;
+	width: 100%;
+	gap: 0.1rem;
+}
+
+.form div:last-child button {
+	margin-left: auto;
+}
+
+.form label {
+	font-family: Roboto Mono;
+	font-size: 1rem;
+}
+
+.form button {
+	margin-top: 1rem;
+}
+
+.form .error {
+	font-size: 0.9rem;
+	color: var(--red);
+}

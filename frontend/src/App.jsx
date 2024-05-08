@@ -10,6 +10,8 @@ import {
 import RootLayout from './pages/RootLayout'
 import NotFoundPage from './pages/NotFoundPage'
 import LoginPage from './pages/auth/LoginPage'
+import RegisterPage from './pages/auth/RegisterPage'
+import { Navigate } from 'react-router-dom'
 import { AuthContext, AuthContextProvider } from './components/AuthContext'
 
 const RedirectIfLoggedIn = () => {
@@ -33,7 +35,7 @@ function App() {
 				<Route path="c/:emailId" element={<EmailPage />} /> */}
 
 				<Route element={<RedirectIfLoggedIn />}>
-					{/* <Route path="/register" element={<RegisterPage />} /> */}
+					<Route path="/register" element={<RegisterPage />} />
 					<Route path="/login" element={<LoginPage />} />
 				</Route>
 
