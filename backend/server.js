@@ -24,9 +24,14 @@ const hasPermissions = async (user, email) => {
 	return currentUserIsRecipient || email.sender.equals(user._id)
 }
 
+app.use((req, res, next) => {
+	console.log(req.url)
+	next()
+})
+
 app.use(
 	cors({
-		origin: '*',
+		origin: process.env.ALLOWED_ORIGIN,
 		credentials: true,
 	})
 )
@@ -79,9 +84,7 @@ app.post('/user/register', async (req, res) => {
 
 	const { email, _id, ...rest } = newUser._doc
 
-	res.json({
-		user: { email, _id },
-	})
+	res.json({ email, _id })
 })
 
 // POST /user/login
@@ -94,7 +97,7 @@ app.post('/user/login', async (req, res) => {
 		const { password, ...rest } = user
 
 		req.session.userId = rest._id.toString()
-		res.json({ user: rest })
+		res.json(rest)
 	} else {
 		res.status(401).json({ message: 'Invalid username or password' })
 	}
