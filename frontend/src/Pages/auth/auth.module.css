@@ -20,7 +20,7 @@
 	gap: 0.1rem;
 }
 
-.form div:last-child button {
+.form div:last-of-type button {
 	margin-left: auto;
 }
 
@@ -34,6 +34,7 @@
 }
 
 .form .error {
-	font-size: 0.9rem;
+	font-size: 1rem;
 	color: var(--red);
+	/* margin-right: auto; */
 }

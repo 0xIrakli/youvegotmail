@@ -13,7 +13,7 @@ axiosInterceptorsInstance.interceptors.response.use(
 	(error) => {
 		if (
 			error.response?.status === 401 &&
-			error.response?.fromOrigin === 'middleware'
+			error.response?.data?.fromOrigin === 'middleware'
 		) {
 			window.location.href = '/login'
 		}

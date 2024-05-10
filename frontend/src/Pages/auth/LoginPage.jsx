@@ -26,12 +26,13 @@ const LoginPage = () => {
 
 	const loginUser = async (formValues, { setSubmitting }) => {
 		try {
+			setSubmitting(true)
 			const res = await axiosInstance.post('/user/login', formValues)
 			setUser(res.data)
-			setSubmitting(false)
 		} catch (e) {
-			setError(error.response?.data.message ?? error.message)
+			setError(e.response?.data.message ?? e.message)
 		}
+		setSubmitting(false)
 	}
 
 	return (
@@ -61,12 +62,18 @@ const LoginPage = () => {
 									className={styles.error}
 								/>
 							</div>
-							{error && <span>{error}</span>}
 							<div>
 								<span>
 									Don't have an account? <NavLink to="/register">register</NavLink>
 								</span>
-								<Button type="submit">Login</Button>
+								{error && (
+									<span className={styles.error} style={{ marginLeft: 'auto' }}>
+										{error}
+									</span>
+								)}
+								<Button type="submit" disabled={formikProps.isSubmitting}>
+									Login
+								</Button>
 							</div>
 						</Form>
 					)

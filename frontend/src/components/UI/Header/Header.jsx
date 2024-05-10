@@ -1,12 +1,22 @@
 import { useContext, useEffect, useState } from 'react'
-import { axiosInstance } from '../../../lib/axiosInstance'
+import { axiosInstance, axiosInterceptorsInstance } from '../../../lib/axiosInstance'
 import { AuthContext } from '../../AuthContext'
 import { NavButton, Button, ButtonSkeleton } from '../Button/Button'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import styles from './Header.module.css'
 
 export const Header = () => {
+	const navigate = useNavigate()
 	const { user, setUser, initialLoading } = useContext(AuthContext)
+
+	const logoutUser = async () => {
+		try {
+			const response = await axiosInterceptorsInstance.delete('/user/logout')
+			navigate('/login')
+		} catch (error) {
+			console.log(error.message)
+		}
+	}
 
 	return (
 		<header className={styles.header}>
@@ -39,7 +49,7 @@ export const Header = () => {
 					</>
 				) : user ? (
 					<>
-						<Button>log out</Button>
+						<Button onClick={logoutUser}>log out</Button>
 					</>
 				) : (
 					<>

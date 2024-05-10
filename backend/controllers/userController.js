@@ -47,5 +47,5 @@ export const loginUser = asyncHandler(async (req, res) => {
 export const logoutUser = asyncHandler(async (req, res) => {
 	req.session.destroy()
 	res.clearCookie('connect.sid')
-	res.sendStatus(204)
+	return res.sendStatus(204)
 })

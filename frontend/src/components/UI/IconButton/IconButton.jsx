@@ -1,9 +1,9 @@
 import { NavLink } from 'react-router-dom'
 import styles from './IconButton.module.css'
 
-export const IconButton = ({ onClick, src, type = 'submit' }) => {
+export const IconButton = ({ src, ...props }) => {
 	return (
-		<button onClick={onClick} type={type} className={styles.button}>
+		<button {...props} className={styles.button}>
 			<img src={src} />
 		</button>
 	)

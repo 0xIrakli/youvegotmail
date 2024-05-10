@@ -1,9 +1,9 @@
 import { NavLink } from 'react-router-dom'
 import styles from './Button.module.css'
 
-export const Button = ({ type = 'submit', children }) => {
+export const Button = ({ children, ...props }) => {
 	return (
-		<button type={type} className={styles.button}>
+		<button {...props} className={styles.button}>
 			{children}
 		</button>
 	)
