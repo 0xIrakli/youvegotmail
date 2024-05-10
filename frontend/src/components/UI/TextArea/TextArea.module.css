@@ -1,0 +1,14 @@
+.textArea {
+	font-family: Roboto Mono;
+	font-size: 1rem;
+	font-weight: 400;
+	background-color: transparent;
+	border: 2px solid var(--gray);
+	border-radius: 0.6rem;
+	padding: 0.6rem 0.75rem;
+	height: 15rem;
+}
+
+textarea {
+	resize: none !important;
+}

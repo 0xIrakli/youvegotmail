@@ -1,0 +1,82 @@
+.container {
+	display: grid;
+	margin-top: 8vh;
+	padding-inline: 10%;
+	gap: 4rem;
+}
+
+.loadingContainer {
+	display: flex;
+	height: 100%;
+	justify-content: center;
+	align-items: center;
+}
+
+.loadingContainer h1 {
+	font-family: Roboto Mono;
+	font-size: 4rem;
+	color: var(--gray);
+}
+
+.title {
+	display: grid;
+	gap: 1rem;
+}
+
+.title div {
+	display: flex;
+	align-items: start;
+}
+
+.title * {
+	font-family: Roboto Mono;
+}
+
+.title h1 {
+	font-size: clamp(1.8rem, 8vw, 2.8rem);
+	text-wrap: wrap;
+}
+
+.title p {
+	font-size: clamp(1.2rem, 6.5vw, 1.6rem);
+	font-weight: 400;
+}
+
+.title span {
+	color: var(--gray);
+	font-size: clamp(1rem, 4vw, 1.2rem);
+	font-weight: 400;
+}
+
+.title p {
+	font-size: 1.2rem;
+}
+
+.buttons {
+	display: flex;
+	gap: 1rem;
+}
+
+@media only screen and (max-width: 600px) {
+	.buttons {
+		flex-direction: column;
+		align-content: stretch;
+	}
+}
+
+.error {
+	font-size: 1rem;
+	color: var(--red);
+	/* margin-right: auto; */
+}
+
+.content {
+	text-wrap: wrap;
+}
+
+.content p {
+	text-wrap: wrap;
+	word-break: break-all;
+	max-width: 100%;
+	font-size: 1.1rem;
+}

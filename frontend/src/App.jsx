@@ -12,6 +12,8 @@ import NotFoundPage from './pages/NotFoundPage'
 import LoginPage from './pages/auth/LoginPage'
 import RegisterPage from './pages/auth/RegisterPage'
 import EmailListPage from './pages/emailList/EmailListPage'
+import EmailPage from './pages/emailPage/EmailPage'
+import ComposePage from './pages/compose/ComposePage'
 import { Navigate } from 'react-router-dom'
 import { AuthContext, AuthContextProvider } from './components/AuthContext'
 
@@ -47,7 +49,8 @@ function App() {
 
 				<Route element={<ProtectedRoute />}>
 					<Route path="c/:emailCategory" element={<EmailListPage />} />
-					{/* <Route path="c/:emailId" element={<EmailPage />} /> */}
+					<Route path="c/:emailCategory/:emailId" element={<EmailPage />} />
+					<Route path="compose" element={<ComposePage />} />
 				</Route>
 
 				<Route element={<RedirectIfLoggedIn />}>

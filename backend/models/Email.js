@@ -24,10 +24,12 @@ export const emailSchema = new Schema(
 		subject: {
 			type: String,
 			required: true,
+			minLength: 3,
 		},
 		body: {
 			type: String,
 			required: true,
+			minLength: 3,
 		},
 		archived: {
 			type: Boolean,

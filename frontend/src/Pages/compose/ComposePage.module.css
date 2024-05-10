@@ -1,7 +1,7 @@
 .formContainer {
 	display: grid;
 	place-items: center;
-	padding-top: 8%;
+	padding-top: 4%;
 }
 
 .form {
@@ -12,18 +12,14 @@
 	gap: 1rem;
 
 	width: 100%;
-	max-width: 40rem;
-	padding-inline: 8vw;
+	max-width: 60rem;
+	padding-inline: 10vw;
 }
 
 .form div {
 	display: grid;
 	width: 100%;
 	gap: 0.1rem;
-}
-
-.form div:last-of-type button {
-	margin-left: auto;
 }
 
 .form label {
@@ -35,10 +31,11 @@
 	margin-top: 1rem;
 }
 
-.form span.error {
-	font-size: 1rem;
+.form .error {
+	font-size: 1.2rem;
 	color: var(--red);
-	/* margin-right: auto; */
+	width: 100%;
+	margin-right: auto;
 }
 
 .form div.error {

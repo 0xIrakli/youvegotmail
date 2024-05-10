@@ -1,6 +1,6 @@
 .container {
 	display: grid;
-	margin-inline: clamp(0.5rem, 20vw, 10rem);
+	margin-inline: min(8vw, 12rem);
 	gap: 1.5rem;
 	padding-bottom: 5rem;
 }
@@ -15,4 +15,10 @@
 	display: grid;
 	gap: 0.5rem;
 	list-style: none;
+}
+
+@media only screen and (max-width: 1200px) {
+	.container {
+		margin-inline: 2rem;
+	}
 }

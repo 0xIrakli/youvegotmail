@@ -62,15 +62,15 @@ const LoginPage = () => {
 									className={styles.error}
 								/>
 							</div>
+							{error && (
+								<div className={styles.error} style={{ marginLeft: 'auto' }}>
+									{error}
+								</div>
+							)}
 							<div>
 								<span>
 									Don't have an account? <NavLink to="/register">register</NavLink>
 								</span>
-								{error && (
-									<span className={styles.error} style={{ marginLeft: 'auto' }}>
-										{error}
-									</span>
-								)}
 								<Button type="submit" disabled={formikProps.isSubmitting}>
 									Login
 								</Button>

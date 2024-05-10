@@ -10,6 +10,8 @@
 }
 
 .container {
+	cursor: pointer;
+	background-color: transparent;
 	border: 1px solid var(--gray);
 }
 
@@ -22,8 +24,14 @@
 }
 
 .container span {
-	font-size: 1.1rem;
+	font-size: clamp(0.8rem, 2vw, 1.2rem);
 	display: flex;
 	align-items: center;
 	gap: 1rem;
+}
+
+@media only screen and (max-width: 600px) {
+	.fullSize * {
+		display: none;
+	}
 }

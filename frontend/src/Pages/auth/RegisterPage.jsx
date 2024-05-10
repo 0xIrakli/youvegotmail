@@ -17,8 +17,11 @@ const validationSchema = object({
 
 	confirmPassword: string().when(
 		'password',
-		(password, schema) => string().equals(password).required('Password is required'),
-		'passwords dont match'
+		(password, schema) =>
+			string()
+				.equals(password, 'Passwords do not match')
+				.required('Password is required'),
+		'Passwords do not match'
 	),
 })
 
@@ -36,10 +39,10 @@ const RegisterPage = () => {
 			setSubmitting(true)
 			const res = await axiosInstance.post('/user/register', formValues)
 			setUser(res.data)
-			setSubmitting(false)
 		} catch (e) {
 			setError(e.response?.data.message ?? e.message)
 		}
+		setSubmitting(false)
 	}
 
 	return (
@@ -78,15 +81,15 @@ const RegisterPage = () => {
 									className={styles.error}
 								/>
 							</div>
+							{error && (
+								<div className={styles.error} style={{ marginLeft: 'auto' }}>
+									{error}
+								</div>
+							)}
 							<div>
 								<span>
 									Already have an account? <NavLink to="/login">login</NavLink>
 								</span>
-								{error && (
-									<span className={styles.error} style={{ marginLeft: 'auto' }}>
-										{error}
-									</span>
-								)}
 								<Button type="submit" disabled={formikProps.isSubmitting}>
 									register
 								</Button>

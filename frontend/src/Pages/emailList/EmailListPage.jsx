@@ -46,7 +46,12 @@ const EmailListPage = () => {
 					  ))
 					: emails.map((email) => (
 							<li key={email._id}>
-								<EmailItem emails={emails} setEmails={setEmails} {...email} />
+								<EmailItem
+									category={emailCategory}
+									emails={emails}
+									setEmails={setEmails}
+									{...email}
+								/>
 							</li>
 					  ))}
 			</ul>

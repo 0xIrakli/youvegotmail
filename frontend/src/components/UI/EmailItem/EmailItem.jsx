@@ -3,6 +3,7 @@ import trashIcon from '../../../assets/trash.svg'
 import { Button, ButtonSkeleton } from '../Button/Button'
 import { IconButton, IconButtonSkeleton } from '../IconButton/IconButton'
 import { axiosInterceptorsInstance } from '../../../lib/axiosInstance'
+import { useNavigate } from 'react-router-dom'
 
 export const EmailItem = ({
 	emails,
@@ -11,10 +12,12 @@ export const EmailItem = ({
 	sender,
 	recipients,
 	subject,
+	category,
 	createdAt: sentAt,
 }) => {
 	const date = new Date(sentAt)
 	const weekday = date.toLocaleString('ge', { dateStyle: 'full' })
+	const navigate = useNavigate()
 
 	const deleteEmail = async () => {
 		const response = await axiosInterceptorsInstance.delete(`/emails/${_id}`)
@@ -22,12 +25,16 @@ export const EmailItem = ({
 	}
 
 	return (
-		<div className={styles.container}>
-			<span>
-				<span>sender:</span>
+		<button
+			onClick={() => navigate(`/c/${category}/${_id}`)}
+			className={styles.container}>
+			<span className={styles.fullSize}>
 				<strong>{sender.email}</strong>
 			</span>
-			<span>{subject}</span>
+			<span>
+				{subject.substring(0, 12)}
+				{subject.substring(0, 12) == subject ? '' : '...'}
+			</span>
 			<span>
 				<span>
 					{date.toLocaleString('ge', {
@@ -38,7 +45,7 @@ export const EmailItem = ({
 				</span>
 				<IconButton src={trashIcon} onClick={deleteEmail} />
 			</span>
-		</div>
+		</button>
 	)
 }
 

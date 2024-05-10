@@ -1,6 +1,7 @@
 .header {
+	max-width: 100vw;
 	padding-block: 3rem;
-	padding-inline: 5%;
+	padding-inline: 4vw;
 
 	gap: 0.8rem;
 
@@ -10,8 +11,8 @@
 }
 
 .header h1 {
-	font-size: clamp(2rem, 4vw, 3rem);
-	padding-right: 2rem;
+	font-size: clamp(1.1rem, 2vw, 3rem);
+	padding-right: 1.5rem;
 }
 
 .header > div {
@@ -20,6 +21,24 @@
 	gap: 1rem;
 }
 
+.header > div > div {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+
 .header .authButtons {
 	margin-left: auto;
+}
+
+@media only screen and (min-width: 1200px) {
+	.mobile * {
+		display: none;
+	}
+}
+
+@media only screen and (max-width: 1200px) {
+	.fullSize {
+		display: none !important;
+	}
 }
