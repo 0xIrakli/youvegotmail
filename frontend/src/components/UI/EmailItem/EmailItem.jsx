@@ -16,12 +16,10 @@ export const EmailItem = ({
 	const date = new Date(sentAt)
 	const weekday = date.toLocaleString('ge', { dateStyle: 'full' })
 
-	// const deleteEmail = async () => {
-	// 	const response = await axiosInterceptorsInstance.delete(`/emails/${_id}`)
-	// 	console.log(response)
-	// 	setEmails([...emails].filter(({ _id: emailId }) => emailId !== _id))
-	// }
-	const deleteEmail = () => {}
+	const deleteEmail = async () => {
+		const response = await axiosInterceptorsInstance.delete(`/emails/${_id}`)
+		setEmails([...emails].filter(({ _id: emailId }) => emailId !== _id))
+	}
 
 	return (
 		<div className={styles.container}>
