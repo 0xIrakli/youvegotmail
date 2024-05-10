@@ -10,9 +10,10 @@ import { AuthContext } from '../../components/AuthContext'
 
 const validationSchema = object({
 	email: string()
+		.max(50)
 		.matches(/^\S+@\S+\.\S+$/, 'Please enter valid Email address')
 		.required('Email is required'),
-	password: string().trim().min(8).required('Password is required'),
+	password: string().trim().min(8).max(20).required('Password is required'),
 })
 
 const LoginPage = () => {

@@ -2,16 +2,18 @@ import { object, string } from 'yup'
 
 export const loginSchema = object({
 	email: string()
+		.max(50)
 		.matches(/^\S+@\S+\.\S+$/, 'Please enter valid Email address')
 		.required('Email is required'),
-	password: string().trim().min(8).required('Password is required'),
+	password: string().trim().min(8).max(20).required('Password is required'),
 })
 
 export const registerSchema = object({
 	email: string()
+		.max(50)
 		.matches(/^\S+@\S+\.\S+$/, 'Please enter valid Email address')
 		.required('Email is required'),
-	password: string().trim().min(8).required('Password is required'),
+	password: string().trim().min(8).max(20).required('Password is required'),
 
 	confirmPassword: string().when(
 		'password',
