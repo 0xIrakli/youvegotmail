@@ -7,6 +7,11 @@ import {
 	logoutUser,
 } from '../controllers/userController.js'
 import { verifyAuth } from '../middleware/verifyAuth.js'
+import {
+	loginSchema,
+	registerSchema,
+	validateForm,
+} from '../middleware/validateForm.js'
 
 export const userRouter = express.Router()
 
@@ -18,11 +23,11 @@ userRouter.get('/status', verifyAuth, getStatus)
 // POST /user/register
 // req.body-ში გადაეცემა email და password. არეგისტრირებს მომხმარებელს, ამატებს მონაცემთა ბაზაში.
 // დარეგისტრირების შემდეგ მომხმარებელი ჩათვალეთ სისტემაში შესულად.აბრუნებს მომხმარებლის ძირითად ინფორმაციას(email, _id).
-userRouter.post('/register', registerUser)
+userRouter.post('/register', validateForm(registerSchema), registerUser)
 
 // POST /user/login
 // req.body-ში გადაეცემა email და password. მომხმარებელი შეყავს სისტემაში. აბრუნებს მომხმარებლის ძირითად ინფორმაციას (email, _id).
-userRouter.post('/login', loginUser)
+userRouter.post('/login', validateForm(loginSchema), loginUser)
 
 // DELETE /user/logout
 // მომხმარებელი გამოყავს სისტემიდან.
