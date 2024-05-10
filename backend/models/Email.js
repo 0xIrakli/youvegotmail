@@ -2,8 +2,13 @@
 
 import { model, Schema } from 'mongoose'
 
-const emailSchema = new Schema(
+export const emailSchema = new Schema(
 	{
+		owner: {
+			type: Schema.Types.ObjectId,
+			ref: 'USER',
+			required: true,
+		},
 		sender: {
 			type: Schema.Types.ObjectId,
 			ref: 'USER',

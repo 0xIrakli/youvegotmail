@@ -8,7 +8,7 @@ export const verifyAuth = async (req, res, next) => {
 			.json({ message: 'Not authenticated', fromOrigin: 'middleware' })
 	}
 
-	req.user = await USER.findById(session.userId)
+	req.user = await USER.findById(session.userId, '-password')
 
 	next()
 }

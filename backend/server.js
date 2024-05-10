@@ -16,14 +16,6 @@ dotenv.config({ path: '.env' })
 
 const app = express()
 
-const hasPermissions = async (user, email) => {
-	const currentUserIsRecipient = email.recipients.some((recipientId) =>
-		recipientId.equals(user._id)
-	)
-
-	return currentUserIsRecipient || email.sender.equals(user._id)
-}
-
 app.use((req, res, next) => {
 	console.log(req.url)
 	next()
@@ -117,32 +109,39 @@ app.delete('/user/logout', (req, res) => {
 app.post('/emails', verifyAuth, async (req, res) => {
 	const { recipients: recipientsString, subject, body } = req.body
 
-	const recipientEmails = new Set(recipientsString.split(','))
+	// filter duplicates
+	const recipientEmails = Array.from(new Set(recipientsString.split(',')))
 
-	const recipients = await Promise.all(
-		[...recipientEmails].map((recipient) =>
-			USER.findOne({ email: recipient })
-				.lean()
-				.then((obj) => obj._id)
-		)
-	)
+	const recipients = await USER.find({ email: { $in: recipientEmails } })
 
-	if (!recipients.every((el) => el)) {
+	if (recipients.length !== recipientEmails.length) {
 		return res.status(400).json({
 			message: 'One or more of recipient email addresses is incorrect',
 		})
 	}
 
-	const newEmail = await EMAIL.create({
-		sender: req.user,
-		recipients,
+	const users = [req.user, ...recipients]
+
+	const email = {
+		sender: req.user._id,
+		recipients: recipients.map((rec) => rec._id),
 		subject,
 		body,
 		archived: false,
+	}
+
+	users.forEach(async (user) => {
+		const newEmail = await EMAIL.create({
+			owner: user._id,
+			...email,
+		})
+
+		user.emails.push(newEmail._id)
+		await newEmail.save()
+		await user.save()
 	})
 
-	await newEmail.save()
-	res.json(newEmail)
+	res.json(email)
 })
 
 // GET /emails/c/:emailCategory
@@ -157,7 +156,6 @@ app.get('/emails/c/:emailCategory', verifyAuth, async (req, res) => {
 	if (category.toLowerCase() === 'inbox') {
 		query = {
 			archived: false,
-			$or: [{ recipients: userId }, { sender: userId }],
 		}
 	}
 
@@ -170,7 +168,6 @@ app.get('/emails/c/:emailCategory', verifyAuth, async (req, res) => {
 	if (category.toLowerCase() === 'archived') {
 		query = {
 			archived: true,
-			$or: [{ recipients: userId }, { sender: userId }],
 		}
 	}
 
@@ -179,11 +176,9 @@ app.get('/emails/c/:emailCategory', verifyAuth, async (req, res) => {
 	}
 
 	return res.json(
-		await EMAIL.find(query)
-			.lean()
+		await EMAIL.find({ owner: req.user._id, ...query })
 			.populate('sender', 'email')
 			.populate('recipients', 'email')
-			.sort({ createdAt: 'descending' })
 	)
 })
 
@@ -192,14 +187,12 @@ app.get('/emails/c/:emailCategory', verifyAuth, async (req, res) => {
 app.get('/emails/:emailId', verifyAuth, async (req, res) => {
 	const { emailId } = req.params
 
-	const email = await EMAIL.findById(emailId)
+	const email = await EMAIL.findOne({ owner: req.user._id, _id: emailId })
+		.populate('sender', 'email')
+		.populate('recipients', 'email')
 
 	if (!email) {
 		return res.sendStatus(404)
-	}
-
-	if (!(await hasPermissions(req.user, email))) {
-		return res.sendStatus(401)
 	}
 
 	return res.json(email)
@@ -212,15 +205,10 @@ app.patch('/emails/:emailId', verifyAuth, async (req, res) => {
 	const { archived } = req.body
 	const { emailId } = req.params
 
-	const email = await EMAIL.findById(emailId)
+	const email = await EMAIL.findOne({ owner: req.user._id, _id: emailId })
 
 	if (!email) {
 		return res.sendStatus(404)
-	}
-
-	if (!(await hasPermissions(req.user, email))) {
-		console.log('AAAAAAAA?????')
-		return res.sendStatus(401)
 	}
 
 	email.archived = archived
@@ -229,19 +217,13 @@ app.patch('/emails/:emailId', verifyAuth, async (req, res) => {
 	return res.json(email)
 })
 
-// app.delete('/emails/:emailId', verifyAuth, async (req, res) => {
-// 	const { emailId } = req.params
+app.delete('/emails/:emailId', verifyAuth, async (req, res) => {
+	const { emailId } = req.params
 
-// 	const email = await EMAIL.findById(emailId)
+	await EMAIL.findOneAndDelete({ owner: req.user._id, _id: emailId })
 
-// 	if (!(await hasPermissions(req.user, email))) {
-// 		return res.sendStatus(401)
-// 	}
-
-// 	console.log(await EMAIL.findByIdAndDelete(emailId))
-
-// 	return res.sendStatus(201)
-// })
+	return res.sendStatus(201)
+})
 
 // მნიშვნელოვანია: იმეილის დაბრუნებამდე/შეცვლამდე აუცილებლად შეამოწმეთ არის თუ არა ავტორიზებული მომხმარებელი გამოგზავნი/მიმღები მომხმარებლების სიაში.
 // სხვის ანგარიშში დამატებული იმეილის წაკითხვა / დაარქივება მომხმარებელს არ უნდა შეეძლოს.
