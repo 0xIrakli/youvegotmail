@@ -35,10 +35,10 @@ export const emailSchema = new Schema(
 			type: Boolean,
 			required: true,
 		},
+		__v: { type: String, select: false },
 	},
 	{
 		timestamps: true,
-		versionKey: false,
 	}
 )
 
