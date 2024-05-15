@@ -6,6 +6,7 @@ import {
 	Route,
 	Outlet,
 	RouterProvider,
+	useLocation,
 } from 'react-router-dom'
 import RootLayout from './pages/RootLayout'
 import NotFoundPage from './pages/NotFoundPage'
@@ -18,6 +19,7 @@ import { Navigate } from 'react-router-dom'
 import { AuthContext, AuthContextProvider } from './components/AuthContext'
 
 const ProtectedRoute = () => {
+	const location = useLocation()
 	const { user, initialLoading } = useContext(AuthContext)
 
 	if (initialLoading) return null
@@ -26,16 +28,21 @@ const ProtectedRoute = () => {
 		return <Outlet />
 	}
 
-	return user ? <Outlet /> : <Navigate to="/login" />
+	return user ? (
+		<Outlet />
+	) : (
+		<Navigate to="/login" state={{ next: location.pathname }} />
+	)
 }
 
 const RedirectIfLoggedIn = () => {
 	const { user, initialLoading } = useContext(AuthContext)
+	const { state } = useLocation()
 
 	if (initialLoading) return null
 
 	if (user !== null) {
-		return <Navigate to="/c/inbox" />
+		return <Navigate to={state?.next || '/c/inbox'} />
 	}
 
 	return <Outlet />

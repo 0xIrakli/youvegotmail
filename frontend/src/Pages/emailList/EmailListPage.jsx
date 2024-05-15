@@ -1,11 +1,8 @@
 import { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../../components/AuthContext'
 import { axiosInterceptorsInstance } from '../../lib/axiosInstance'
-import { useNavigate, useParams } from 'react-router-dom'
-import {
-	EmailItem,
-	EmailItemSkeleton,
-} from '../../components/UI/EmailItem/EmailItem'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { EmailItem, EmailItemSkeleton } from '../../components/EmailItem/EmailItem'
 import styles from './EmailListPage.module.css'
 
 const EmailListPage = () => {
@@ -14,6 +11,7 @@ const EmailListPage = () => {
 	const [emails, setEmails] = useState([])
 	const { user, initialLoading } = useContext(AuthContext)
 	const navigate = useNavigate()
+	const location = useLocation()
 
 	useEffect(() => {
 		const getEmails = async () => {
@@ -26,13 +24,13 @@ const EmailListPage = () => {
 				setLoading(false)
 			} catch (e) {
 				if (e?.response.status == 404) {
-					navigate('/404')
+					navigate('/404', { state: { url: location.pathname } })
 				}
 			}
 		}
 
 		getEmails()
-	}, [emailCategory])
+	}, [emailCategory, navigate])
 
 	return (
 		<div className={styles.container}>

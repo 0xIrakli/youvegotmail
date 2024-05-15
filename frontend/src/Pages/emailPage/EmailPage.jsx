@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../../components/AuthContext'
 import { axiosInterceptorsInstance } from '../../lib/axiosInstance'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import styles from './EmailPage.module.css'
 import { Button } from '../../components/UI/Button/Button'
 
@@ -11,6 +11,7 @@ const EmailPage = () => {
 	const { emailId } = useParams()
 	const { user } = useContext(AuthContext)
 	const navigate = useNavigate()
+	const location = useLocation()
 
 	const archiveEmail = async () => {
 		try {
@@ -24,7 +25,9 @@ const EmailPage = () => {
 			} else {
 				navigate(`/c/inbox/${response.data._id}`)
 			}
-		} catch (e) {}
+		} catch (e) {
+			console.log(e)
+		}
 	}
 
 	const replyToEmail = () => {
@@ -58,13 +61,13 @@ const EmailPage = () => {
 				setLoading(false)
 			} catch (e) {
 				if (e?.response.status == 404) {
-					navigate('/404')
+					navigate('/404', { state: { url: location.pathname } })
 				}
 			}
 		}
 
 		getEmails()
-	}, [emailId])
+	}, [emailId, navigate])
 
 	if (!email) {
 		return (
@@ -99,6 +102,8 @@ const EmailPage = () => {
 			<div className={styles.content}>
 				<p>
 					{email.body.split('\n').map((line) => (
+						// miwers rom key prop chirdeba magram mgoni uaresi iqneba
+						// tu spanebshi an raime componentshi movaqcev mtlianad rom key davumato
 						<>
 							{line}
 							<br />

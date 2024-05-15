@@ -5,7 +5,7 @@ const RootLayout = () => {
 	return (
 		<>
 			<Header />
-			<main>
+			<main style={{ paddingBlock: '1rem' }}>
 				<Outlet />
 			</main>
 		</>
