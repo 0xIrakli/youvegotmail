@@ -15,11 +15,11 @@ export const AuthContextProvider = ({ children }) => {
 		const checkStatus = async () => {
 			try {
 				const response = await axiosInstance.get('/user/status')
-				setInitialLoading(false)
 				setUser(response.data.user)
 			} catch (error) {
-				setInitialLoading(false)
+				console.log(error.stack)
 			}
+			setInitialLoading(false)
 		}
 
 		checkStatus()

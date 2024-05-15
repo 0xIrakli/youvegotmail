@@ -26,6 +26,7 @@ export const Header = () => {
 	const logoutUser = async () => {
 		try {
 			const response = await axiosInterceptorsInstance.delete('/user/logout')
+			setUser(null)
 			navigate('/login')
 		} catch (error) {
 			console.log(error.message)
