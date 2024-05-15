@@ -27,16 +27,18 @@ export const sendEmails = asyncHandler(async (req, res) => {
 		archived: false,
 	}
 
-	users.forEach(async (user) => {
-		const newEmail = await EMAIL.create({
-			owner: user._id,
-			...email,
-		})
+	await Promise.all(
+		users.map(async (user) => {
+			const newEmail = await EMAIL.create({
+				owner: user._id,
+				...email,
+			})
 
-		user.emails.push(newEmail._id)
-		await newEmail.save()
-		await user.save()
-	})
+			user.emails.push(newEmail._id)
+			await newEmail.save()
+			await user.save()
+		})
+	)
 
 	res.json(email)
 })
@@ -49,6 +51,7 @@ export const getEmails = asyncHandler(async (req, res) => {
 	if (category.toLowerCase() === 'inbox') {
 		query = {
 			archived: false,
+			recipients: userId,
 		}
 	}
 
@@ -77,10 +80,15 @@ export const getEmails = asyncHandler(async (req, res) => {
 
 export const getEmail = asyncHandler(async (req, res) => {
 	const { emailId } = req.params
+	let email
 
-	const email = await EMAIL.findOne({ owner: req.user._id, _id: emailId })
-		.populate('sender', 'email')
-		.populate('recipients', 'email')
+	try {
+		email = await EMAIL.findOne({ owner: req.user._id, _id: emailId })
+			.populate('sender', 'email')
+			.populate('recipients', 'email')
+	} catch (e) {
+		console.log(e)
+	}
 
 	if (!email) {
 		return res.sendStatus(404)
@@ -94,6 +102,8 @@ export const setEmailArchived = asyncHandler(async (req, res) => {
 	const { emailId } = req.params
 
 	const email = await EMAIL.findOne({ owner: req.user._id, _id: emailId })
+		.populate('recipients', 'email')
+		.populate('sender', 'email')
 
 	if (!email) {
 		return res.sendStatus(404)
@@ -110,5 +120,5 @@ export const deleteEmail = asyncHandler(async (req, res) => {
 
 	await EMAIL.findOneAndDelete({ owner: req.user._id, _id: emailId })
 
-	return res.sendStatus(201)
+	return res.sendStatus(204)
 })

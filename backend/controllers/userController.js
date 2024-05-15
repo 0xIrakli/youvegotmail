@@ -34,7 +34,7 @@ export const loginUser = asyncHandler(async (req, res) => {
 	const { email, password } = req.body
 	const user = await USER.findOne({ email }).lean()
 
-	if ((await bcrypt.compare(password, user.password)) && user) {
+	if (user && (await bcrypt.compare(password, user.password))) {
 		const { password, ...rest } = user
 
 		req.session.userId = rest._id.toString()
