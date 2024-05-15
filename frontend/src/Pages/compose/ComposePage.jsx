@@ -8,12 +8,7 @@ import { axiosInstance, axiosInterceptorsInstance } from '../../lib/axiosInstanc
 import { Button } from '../../components/UI/Button/Button'
 import { AuthContext } from '../../components/AuthContext'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
-
-const validationSchema = object({
-	body: string().min(3).required('Body is required'),
-	subject: string().min(3).required('Subject is required'),
-	recipients: string().required('Recipients list is required'),
-})
+import { emailSchema } from '../../../../backend/validationSchemas'
 
 const _initialValues = {
 	body: '',
@@ -49,7 +44,7 @@ const ComposePage = () => {
 			<Formik
 				initialValues={initialValues}
 				onSubmit={sendEmail}
-				validationSchema={validationSchema}>
+				validationSchema={emailSchema}>
 				{(formikProps) => {
 					return (
 						<Form className={styles.form}>

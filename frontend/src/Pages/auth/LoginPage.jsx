@@ -7,14 +7,7 @@ import { string, object } from 'yup'
 import { axiosInstance } from '../../lib/axiosInstance'
 import { Button } from '../../components/UI/Button/Button'
 import { AuthContext } from '../../components/AuthContext'
-
-const validationSchema = object({
-	email: string()
-		.max(50)
-		.matches(/^\S+@\S+\.\S+$/, 'Please enter valid Email address')
-		.required('Email is required'),
-	password: string().trim().min(8).max(20).required('Password is required'),
-})
+import { loginSchema } from '../../../../backend/validationSchemas'
 
 const LoginPage = () => {
 	const { setUser } = useContext(AuthContext)
@@ -40,7 +33,7 @@ const LoginPage = () => {
 			<Formik
 				initialValues={initialValues}
 				onSubmit={loginUser}
-				validationSchema={validationSchema}>
+				validationSchema={loginSchema}>
 				{(formikProps) => {
 					return (
 						<Form className={styles.form}>

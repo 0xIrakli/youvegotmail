@@ -7,23 +7,7 @@ import { string, object } from 'yup'
 import { Button } from '../../components/UI/Button/Button'
 import { axiosInstance } from '../../lib/axiosInstance'
 import { AuthContext } from '../../components/AuthContext'
-
-const validationSchema = object({
-	email: string()
-		.max(50)
-		.matches(/^\S+@\S+\.\S+$/, 'Please enter valid Email address')
-		.required('Email is required'),
-	password: string().trim().min(8).max(20).required('Password is required'),
-
-	confirmPassword: string().when(
-		'password',
-		(password, schema) =>
-			string()
-				.equals(password, 'Passwords do not match')
-				.required('Password is required'),
-		'Passwords do not match'
-	),
-})
+import { registerSchema } from '../../../../backend/validationSchemas'
 
 const RegisterPage = () => {
 	const { setUser } = useContext(AuthContext)
@@ -50,7 +34,7 @@ const RegisterPage = () => {
 			<Formik
 				initialValues={initialValues}
 				onSubmit={registerUser}
-				validationSchema={validationSchema}>
+				validationSchema={registerSchema}>
 				{(formikProps) => {
 					return (
 						<Form className={styles.form}>

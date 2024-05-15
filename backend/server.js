@@ -1,7 +1,6 @@
 import express from 'express'
 import mongoose from 'mongoose'
 import MongoStore from 'connect-mongo'
-import cookieparser from 'cookie-parser'
 import session from 'express-session'
 import cors from 'cors'
 import dotenv from 'dotenv'
@@ -26,7 +25,6 @@ app.use(
 	})
 )
 
-app.use(cookieparser())
 app.use(express.json())
 
 app.use(

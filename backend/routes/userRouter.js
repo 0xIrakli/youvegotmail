@@ -7,11 +7,8 @@ import {
 	logoutUser,
 } from '../controllers/userController.js'
 import { verifyAuth } from '../middleware/verifyAuth.js'
-import {
-	loginSchema,
-	registerSchema,
-	validateForm,
-} from '../middleware/validateForm.js'
+import { validateForm } from '../middleware/validateForm.js'
+import { loginSchema, registerSchema } from '../validationSchemas.js'
 
 export const userRouter = express.Router()
 
