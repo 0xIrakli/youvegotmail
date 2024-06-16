@@ -8,7 +8,7 @@ import { axiosInstance, axiosInterceptorsInstance } from '../../lib/axiosInstanc
 import { Button } from '../../components/UI/Button/Button'
 import { AuthContext } from '../../components/AuthContext'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import { emailSchema } from '../../../../backend/validationSchemas'
+import { emailSchema } from '../../../../frontend/validationSchemas'
 
 const _initialValues = {
 	body: '',

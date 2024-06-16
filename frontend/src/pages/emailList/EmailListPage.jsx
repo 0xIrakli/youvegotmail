@@ -20,7 +20,7 @@ const EmailListPage = () => {
 				const response = await axiosInterceptorsInstance.get(
 					`/emails/c/${emailCategory}`
 				)
-				setEmails(response.data)
+				setEmails(response.data ? response.data : [])
 				setLoading(false)
 			} catch (e) {
 				if (e?.response.status == 404) {
@@ -42,7 +42,8 @@ const EmailListPage = () => {
 								<EmailItemSkeleton />
 							</li>
 					  ))
-					: emails.map((email) => (
+					: typeof emails.length == 'list' &&
+					  emails.map((email) => (
 							<li key={email._id}>
 								<EmailItem
 									category={emailCategory}

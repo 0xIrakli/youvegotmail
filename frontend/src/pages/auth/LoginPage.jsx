@@ -7,7 +7,7 @@ import { string, object } from 'yup'
 import { axiosInstance } from '../../lib/axiosInstance'
 import { Button } from '../../components/UI/Button/Button'
 import { AuthContext } from '../../components/AuthContext'
-import { loginSchema } from '../../../../backend/validationSchemas'
+import { loginSchema } from '../../../../frontend/validationSchemas'
 
 const LoginPage = () => {
 	const { setUser } = useContext(AuthContext)
