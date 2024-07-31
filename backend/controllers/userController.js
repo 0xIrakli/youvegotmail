@@ -10,7 +10,8 @@ export const getStatus = asyncHandler(async (req, res) => {
 })
 
 export const registerUser = asyncHandler(async (req, res) => {
-	const { email: regEmail, password: regPassword } = req.body
+	const { email: regEmailCase, password: regPassword } = req.body
+	const regEmail = regEmailCase.toLowerCase()
 
 	if (await USER.findOne({ email: regEmail })) {
 		return res.status(409).json({ message: 'email already in use' })
@@ -31,7 +32,8 @@ export const registerUser = asyncHandler(async (req, res) => {
 })
 
 export const loginUser = asyncHandler(async (req, res) => {
-	const { email, password } = req.body
+	const { email: emailCase, password } = req.body
+	const email = emailCase.toLowerCase()
 	const user = await USER.findOne({ email }).lean()
 
 	if (user && (await bcrypt.compare(password, user.password))) {
