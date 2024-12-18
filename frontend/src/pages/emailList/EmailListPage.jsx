@@ -42,7 +42,7 @@ const EmailListPage = () => {
 								<EmailItemSkeleton />
 							</li>
 					  ))
-					: typeof emails.length == 'list' &&
+					: emails &&
 					  emails.map((email) => (
 							<li key={email._id}>
 								<EmailItem
